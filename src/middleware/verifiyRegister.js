@@ -1,37 +1,38 @@
 import DB from "../models/index.js"
-
-const {user: User} = DB
+const {USER} = DB
+console.log(DB);  
 
 const checkDupicate = async (req,res, next) => {
     try{
-        const userNameExists = await User.findOne({
+        const userNameExists = await USER.findOne({
             where: {
                 username: req.body.username 
             }
         })
 
         if(userNameExists){
-            return res.stats(400).send({
+            return res.status(400).send({
                 message: "Username exists"
             })
         }
 
-        const emailExists = await User.findOne({
+        const emailExists = await USER.findOne({
             where: {
                 email: req.body.email 
             }
         })
 
         if(emailExists){
-            return res.stats(400).send({
+            return res.status(400).send({
                 message: "Username exists"
             })
         }
 
         next()
     } catch(error){
+        console.error(error.stack)
         return res.status(500).send({
-            message:"Internal server error"
+            message:"I was triggered Internal server error"
         })
     }
 }

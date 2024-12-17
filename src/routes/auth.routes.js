@@ -9,7 +9,7 @@ const router = express.Router()
     })
 
     router.post(
-        "/auth/register",
+        "/register",
         [verifyRegister.checkDupicate],
         register
     )
