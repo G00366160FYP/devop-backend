@@ -1,4 +1,4 @@
-import DB from "../models/index"
+import DB from "../models/index.js"
 
 const {user: User} = DB
 
