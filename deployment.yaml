@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: register-deployment
+  labels:
+    app: register-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: register-backend
+  template:
+    metadata:
+      labels:
+        app: register-backend
+    spec:
+      containers:
+        - name: backend
+          image: 148761679855.dkr.ecr.eu-north-1.amazonaws.com/devop/register:latest
+          ports:
+          - containerPort: 3000
+          env:
+          - name: DB_HOST
+            value: "database-register.ctu6uiwugr5b.eu-north-1.rds.amazonaws.com"
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: backend-secrets
+                key: db-user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: backend-secrets
+                key: db-password
+          - name: DB_NAME
+            value: "registerDB"
+
