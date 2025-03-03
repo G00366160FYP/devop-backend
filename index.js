@@ -1,13 +1,16 @@
 import express from 'express';
 import cors from 'cors'
-import DB from './models/index.js'
-import authRoutes from './routes/auth.routes.js';
+import DB from './src/models/index.js'
+import authRoutes from './src/routes/auth.routes.js';
 
 const app = express();
 const port = 3000
 
+
 const corsOptions = {
-  origin: 'http://localhost:8081'
+  origin: 'http://localhost:8080',
+  methods: 'POST',
+  allowedHeaders: 'Origin, Content-Type, Accept'
 }
 
 app.use(cors(corsOptions))

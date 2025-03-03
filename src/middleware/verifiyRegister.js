@@ -1,6 +1,6 @@
 import DB from "../models/index.js"
 const {USER} = DB
-console.log(DB);  
+// console.log(DB);  
 
 const checkDupicate = async (req,res, next) => {
     try{
