@@ -16,11 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-<<<<<<< HEAD
           image: 148761679855.dkr.ecr.eu-north-1.amazonaws.com/devop/register:latest
-=======
-          image: ecr-repo/backend-register:latest
->>>>>>> a2b792f7ded243a0d2f020c47a14bc6ef4737b4b
           ports:
           - containerPort: 3000
           env:
