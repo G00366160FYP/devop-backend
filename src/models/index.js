@@ -3,7 +3,7 @@ import Sequelize from "sequelize"
 import userModel from "../models/user.model.js"
 
 
-/* development 
+ // development 
 console.log("Config loaded in Sequelize:", config)
 console.log("Pool settings:", config.development.pool)
 const SEQUELIZE = new Sequelize(config.development.DB,config.development.USER,config.development.PASSWORD, {
@@ -16,21 +16,21 @@ const SEQUELIZE = new Sequelize(config.development.DB,config.development.USER,co
         idle: config.development.pool.idle
     }
 })
-*/
+
 
 // Production.
-console.log("Config loaded in Sequelize:", config)
-console.log("Pool settings:", config.production.pool)
-const SEQUELIZE = new Sequelize(config.production.DB,config.production.USER,config.production.PASSWORD, {
-    host: config.production.HOST,
-    dialect: config.production.dialect,
-    pool: {
-        max: config.production.pool.max,
-        min: config.production.pool.min,
-        acquire: config.production.pool.acquire,
-        idle: config.production.pool.idle
-    }
-})
+//console.log("Config loaded in Sequelize:", config)
+//console.log("Pool settings:", config.production.pool)
+//const SEQUELIZE = new Sequelize(config.production.DB,config.production.USER,config.production.PASSWORD, {
+//    host: config.production.HOST,
+ //   dialect: config.production.dialect,
+//    pool: {
+//        max: config.production.pool.max,
+//        min: config.production.pool.min,
+//        acquire: config.production.pool.acquire,
+//        idle: config.production.pool.idle
+//    }
+// })
 
 async function dbConnect(){
     try{
