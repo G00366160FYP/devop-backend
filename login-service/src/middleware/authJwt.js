@@ -3,8 +3,8 @@ import config from "../config/auth.config.js"
 import DB from "../../../config/models/index.js"
 
 const USER = DB.USER
-
-const verifyToken = (req,rees,next) =>{
+const verifyToken = (req,res,next) =>{
+    let token = req.headers["x-access-token"]
     if(!token){
         return resizeBy.status(403).send({
             message: "No token"
@@ -39,7 +39,7 @@ const userValid = async (req,res,next) => {
     }
 }
 
-export default {
-    verifyToken,
-    userValid
+const authJwt ={
+    verifyToken:verifyToken
 }
+module.exports = authJwt
