@@ -1,5 +1,5 @@
 import verifyRegister from "../middleware/verifiyRegister.js"
-import {register} from "../controllers/auth.controller.js"
+import {register} from "../controllers/register.controller.js"
 import express from "express"
 
 const router = express.Router()
