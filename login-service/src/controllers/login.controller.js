@@ -1,9 +1,8 @@
-import DB from "../../../config/models"
-import { config } from "../../../config/db.config"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
-import { User } from "../../../config/models/user.model"
+import db from "../../../config/models/index.js"
 
+const User = db.USER
 
 export const signIn = async (req, res) => {
     User.findOne({
