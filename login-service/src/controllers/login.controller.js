@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 import db from "../../../config/models/index.js"
+import { secret } from "../../jwtSecrets/secrets.js"
 
 const User = db.USER
 
@@ -27,7 +28,7 @@ export const signIn = async (req, res) => {
         }
 
         const token = jwt.sign({ id: User.id},
-                               config.secret,
+                                secret,
                                {
                                 algorithm: "HS256",
                                 expiresIn: 86400,
