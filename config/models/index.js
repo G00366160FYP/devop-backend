@@ -1,5 +1,8 @@
 import {config} from "../db.config.js"
 import userModel from "./user.model.js"
+import messageModel from "./message.model.js"
+import chatRoomModel from "./chatRoom.model.js"
+import roomParticipantModel from "./roomParticipant.model.js"
 import Sequelize from "sequelize"
 
 
@@ -44,7 +47,9 @@ console.log("connected")
 
 
 
+// Call the database connection function
 dbConnect()
+
 
 const DB = {}
 
@@ -52,5 +57,8 @@ DB.Sequelize = Sequelize
 DB.sequelize = SEQUELIZE
 
 DB.USER = userModel(SEQUELIZE,Sequelize)
+DB.MESSAGE = messageModel(SEQUELIZE,Sequelize)
+DB.CHATROOM = chatRoomModel(SEQUELIZE,Sequelize)
+DB.ROOMPARTICIPANT = roomParticipantModel(SEQUELIZE,Sequelize)
 
 export default DB
