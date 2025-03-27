@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors'
 import DB from '../config/models/index.js'
+import chatRoomRoutes from './src/routes/chatRoom.routes.js'
 
 const app = express();
 const port = 3002
@@ -17,7 +18,7 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: true }))
 
-// app.use('/auth', authRoutes)
+app.use('/auth', chatRoomRoutes)
 
 DB.sequelize.sync({ force: true }).then(()=> {
   console.log('Drop and Resync Database with { force: true }')
