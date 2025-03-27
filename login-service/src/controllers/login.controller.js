@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 import db from "../../../config/models/index.js"
-import { secret } from "../../jwtSecrets/secrets.js"
+// import { secret } from "../../../config/jwtSecrets/secrets.js"
+const secret = "temp-test-secret"
 const User = db.USER
 
 export const signIn = async (req, res) => {
@@ -25,16 +26,20 @@ export const signIn = async (req, res) => {
                 message: "Invalid Password"
             })
         }
-
+            // In login service when creating token
+            
+            
+            console.log("FULL SECRET:", secret);
         const token = jwt.sign({ id: User.id},
-                            secret,
+                                secret,
                                {
                                 algorithm: "HS256",
                                 expiresIn: 86400,
                                 allowInsecureKeySizes: true,
                                }     
         )
-
+        console.log("FULL TOKEN:", token);
+        
         res.status(200).send({
             id: User.id,
             username: User.username,
