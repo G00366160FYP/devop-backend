@@ -19,10 +19,23 @@ router.get("/",
     chatRoomController.getAllChatRooms
 )
 
+
 router.get("/:id", 
     [authJwt.verifyToken], 
     chatRoomController.getChatRoomById
 )
 
-router.post("/:id/join", authJwt.verifyToken, chatRoomController.join)
+router.post("/:id/join", 
+    [authJwt.verifyToken], 
+    chatRoomController.join)
+
+router.delete("/:id/leave", 
+    [authJwt.verifyToken], 
+    chatRoomController.leaveChatRoom
+)
+
+router.delete("/:id", 
+    [authJwt.verifyToken], 
+    chatRoomController.deleteChatRoom
+)
 export default router

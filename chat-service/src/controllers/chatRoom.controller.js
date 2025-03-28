@@ -123,3 +123,63 @@ export const getChatRoomById = async (req, res) => {
         })
     }
 }
+
+export const leaveChatRoom = async (req, res) => {
+    try {
+        const roomId = req.params.id
+        const userId = req.userId
+
+        const result = await RoomParticipant.destroy({
+            where: {
+                userId: userId,
+                roomId: roomId
+            }
+        })
+
+        if (result == 0) {
+            return res.status(404).send({
+                message: "Not a partcipant in this room."
+            })
+        }
+
+
+        res.status(200).send({
+            message: "User left the chat room successfully."
+        })
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "An error occurred while leaving the chat room."
+        })
+    }
+}
+
+export const deleteChatRoom = async (req, res) => {
+    try {
+        const chatRoomId = req.params.id
+        const userId = req.userId
+
+        const chatRoom = await ChatRoom.findByPk(req.params.id)
+
+        if (!chatRoom) {
+            return res.status(404).send({
+                message: "Chat room not found."
+            })
+        }
+
+        if (chatRoom.createdBy !== userId) {
+            return res.status(403).send({
+                message: "Only the creator can delete the chat room."
+            })
+        }
+
+        await chatRoom.destroy()
+
+        res.status(200).send({
+            message: "Chat room deleted successfully."
+        })
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "An error occurred while deleting the chat room."
+        })
+    }
+}
