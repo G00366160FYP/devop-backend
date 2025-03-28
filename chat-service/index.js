@@ -2,9 +2,13 @@ import express from 'express';
 import cors from 'cors'
 import DB from '../config/models/index.js'
 import chatRoomRoutes from './src/routes/chatRoom.routes.js'
+import http from 'http'
+import setupSocketIO from './src/services/socket.js';
 
 const app = express();
 const port = 3002
+const server = http.createServer(app)
+const io = setupSocketIO(server)
 
 const corsOptions = {
   origin: '*',
@@ -29,6 +33,6 @@ app.get('/', function (req, res) {
 });
 
 
-app.listen(port,function () {
+server.listen(port,function () {
   console.log('Example app listening on port ' + port)
 });
