@@ -9,3 +9,9 @@ const router = express.Router();
 })
 
 router.post("/", authJwt.verifyToken, messageController.create)
+
+router.get("/room/:roomId", authJwt.verifyToken, messageController.findByRoom)
+
+router.delete("/room/:id", authJwt.verifyToken, messageController.deleteMessage)
+
+export default router
