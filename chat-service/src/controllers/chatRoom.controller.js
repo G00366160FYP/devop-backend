@@ -75,3 +75,51 @@ export const join = async (req, res) => {
         })
     }
 }
+export const getAllChatRooms = async (req, res) => {
+    try {
+        const chatRooms = await ChatRoom.findAll({
+            where: req.query.name
+            ? { name: { [Op.like]: `%${req.query.name}%` } }
+            : {},
+            include: [{
+                model: USER,
+                attributes: ['id', 'username'],
+                through: {
+                    attributes: []
+                }
+            }]
+        })
+
+        res.status(200).send(chatRooms)
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "An error occurred while retrieving chat rooms."
+        })
+    }
+}
+
+export const getChatRoomById = async (req, res) => {
+    try {
+        const chatRoom = await ChatRoom.findByPk(req.params.id, {
+            include: [{
+                model: USER,
+                attributes: ['id', 'username'],
+                through: {
+                    attributes: []
+                }
+            }]
+        })
+
+        if (!chatRoom) {
+            return res.status(404).send({
+                message: "Chat room not found."
+            })
+        }
+
+        res.status(200).send(chatRoom)
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "An error occurred while retrieving the chat room."
+        })
+    }
+}

@@ -14,5 +14,15 @@ router.post(
     chatRoomController.createChatRoom
 )
 
+router.get("/", 
+    [authJwt.verifyToken], 
+    chatRoomController.getAllChatRooms
+)
+
+router.get("/:id", 
+    [authJwt.verifyToken], 
+    chatRoomController.getChatRoomById
+)
+
 router.post("/:id/join", authJwt.verifyToken, chatRoomController.join)
 export default router
