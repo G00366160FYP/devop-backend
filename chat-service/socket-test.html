@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Tester</title>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h2> tester</h2>
+    <div>
+        <label> Token: </label>
+        <input type="text" id="token" style="width: 400px;">
+        <button onclick="connect()">Connect</button>
+    </div>
+    <div style="margin-top: 10px;">
+        <label> Room ID: </label>
+        <input type="text" id="roomId" value="1">
+        <button onclick="joinRoom()">Join room</button>
+    </div>
+    <div style="margin-top: 10px;">
+        <textarea id="message" rows="3" cols="50" placeholder="Type your message"></textarea>
+        <br>
+        <button onclick="sendMessage()">Send Message</button>
+    </div>
+    <div style="margin-top: 10px;">
+        <h3>Messages:</h3>
+    <div id="messages" style=" height: 200px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;"></div>
+
+    <script>
+        let socket
+        function addMessage(text) {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += `<div>${text}</div>`;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function connect() {
+            const token = document.getElementById('token').value;
+            socket = io('http://localhost:3002', {
+                auth: {
+                    token: token
+                }
+            });
+
+            socket.on('connect', () => {
+                addMessage('Connected to server');
+            });
+
+            socket.on('disconnect', () => {
+                addMessage('Disconnected from server');
+            });
+
+            socket.on('receive-message', (data) => {
+                addMessage(`Received message: ${data}`);
+            });
+        }
+        function joinRoom() {
+            if (!socket) {
+                addMessage('Connect to server');
+                return;
+            }
+            
+            const roomId = document.getElementById('roomId').value
+            socket.emit('join-room', roomId)
+            addMessage(`Joined room: ${roomId}`);
+
+        }
+
+        function sendMessage(){
+            if (!socket){
+                addMessage('Connect to server');
+                return;
+            }
+
+            const roomId = document.getElementById('roomId').value
+            const message = document.getElementById('message').value
+
+            socket.emit('send-message', { 
+                content: message, 
+                roomId: roomId 
+            })
+
+            document.getElementById('message').value = ''
+            addMessage(`Sent message: ${message}`);
+        }
+
+
+    </script>
+</body>
+</html>
