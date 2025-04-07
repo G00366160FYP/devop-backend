@@ -8,7 +8,7 @@ const router = express.Router()
     })
 
     router.post(
-        "/signin",
+        "/login",
         signIn
     )
 

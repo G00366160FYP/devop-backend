@@ -14,7 +14,7 @@ const io = setupSocketIO(server)
 const corsOptions = {
   origin: '*',
   methods: 'GET,PUT,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
+  allowedHeaders: 'Content-Type,Authorization,x-access-token',
 }
 
 app.use(cors(corsOptions))

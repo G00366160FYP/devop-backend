@@ -61,4 +61,25 @@ DB.MESSAGE = messageModel(SEQUELIZE,Sequelize)
 DB.CHATROOM = chatRoomModel(SEQUELIZE,Sequelize)
 DB.ROOMPARTICIPANT = roomParticipantModel(SEQUELIZE,Sequelize)
 
+DB.USER.hasMany(DB.MESSAGE, {foreignKey: "userId" })
+
+DB.MESSAGE.belongsTo(DB.USER, {foreignKey: "userId" })
+
+DB.CHATROOM.hasMany(DB.MESSAGE, {foreignKey: "roomId" })
+
+DB.MESSAGE.belongsTo(DB.CHATROOM, {foreignKey: "roomId" })
+
+DB.USER.belongsToMany(DB.CHATROOM, {through: DB.ROOMPARTICIPANT, foreignKey: "userId",})
+DB.CHATROOM.belongsToMany(DB.USER, {through: DB.ROOMPARTICIPANT, foreignKey: "roomId",})
+
+async function seed() {
+    const user = await DB.USER.create({username: "sam", password:"bleach123", email:"sam@gmail.com" })
+}
+
+seed().then(() => {
+    console.log("Seeding completed.")
+}).catch((error) => {
+    console.error("Error during seeding:", error)
+})
+
 export default DB
