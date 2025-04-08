@@ -6,6 +6,9 @@ const USER = DB.USER
 
 export const create = async (req, res) => {
     try {
+        console.log("Request body:", req.body)
+        console.log("Request params:", req.params)
+        console.log("Request userId:", req.userId)
         if (!req.body.content) {
             return res.status(400).send({
                 message: "Message content cannot be empty!"
@@ -15,8 +18,10 @@ export const create = async (req, res) => {
         const message = {
             content: req.body.content,
             roomId: req.params.roomId,
-            senderId: req.userId
+            userId: req.userId
         }
+
+        console.log("creating message with data:", message)
 
         const newMessage = await MESSAGE.create(message)
         res.status(201).send(newMessage)

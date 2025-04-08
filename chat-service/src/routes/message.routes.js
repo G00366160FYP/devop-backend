@@ -8,7 +8,7 @@ const router = express.Router();
         next()
 })
 
-router.post("/", authJwt.verifyToken, messageController.create)
+router.post("/room/:roomId", authJwt.verifyToken, messageController.create)
 
 router.get("/room/:roomId", authJwt.verifyToken, messageController.findByRoom)
 
