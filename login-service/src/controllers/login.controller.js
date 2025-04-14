@@ -30,7 +30,7 @@ export const signIn = async (req, res) => {
             
             
             console.log("FULL SECRET:", secret);
-        const token = jwt.sign({ id: User.id},
+        const token = jwt.sign({ id: User.id, username: User.username},
                                 secret,
                                {
                                 algorithm: "HS256",
