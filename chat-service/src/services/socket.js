@@ -38,7 +38,7 @@ export default function setupSocketIO(server) {
 
         })
 
-        socket.on('send-message', async (data) => {
+        socket.on('send-message', async (data, callback) => {
         try{
             const message = await Message.create({
                 content: data.content,
@@ -49,12 +49,17 @@ export default function setupSocketIO(server) {
             io.to(`room-${data.roomId}`).emit('receive-message', {
                 ...data,
                 id: message.id,
-                userId: socket.userId,
-                username: socket.username,
                 createdAt: message.createdAt,
+                user:{ 
+                    id: socket.userId,
+                    username: socket.username,
+                }
+             
             })
+            if(callback) callback({ success: true})
         } catch (error) {
             console.error("Error sending message: ", error)
+            if (callback) callback({ success: false, error: error.message })
         }
     })
 

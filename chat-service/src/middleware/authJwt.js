@@ -23,6 +23,7 @@ const verifyToken = (req,res,next) =>{
             })
         }
         req.userId = decoded.id
+        req.username = decoded.username
         next()
     })
 }
