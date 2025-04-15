@@ -38,4 +38,12 @@ coverage/
 *.swo  
 *.sublime-workspace  
 *.sublime-project  
-Thumbs.db  
+Thumbs.db
+
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+.DS_Store
+*.log
