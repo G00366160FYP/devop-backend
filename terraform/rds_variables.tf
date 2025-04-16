@@ -3,14 +3,14 @@ variable "vpc_id" {
     type = string
 }
 
-variable "my_ip" {
-    description = "My Ip address for database access"
-    type = string
-}
-
-// variable "eks_security_group_id" {
-//    description = "Security group ID of the EKS cluster"
+//variable "my_ip" {
+//    description = "My Ip address for database access"
 //    type = string
+//}
+
+ //variable "eks_security_group_id" {
+    //description = "Security group ID of the EKS cluster"
+  //  type = string
 //}
 
 variable "db_name" {

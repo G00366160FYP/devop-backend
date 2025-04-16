@@ -13,10 +13,10 @@ export const config = {
         }
     },
     production:{
-        HOST: process.env.DB_HOST || "database-register.ctu6uiwugr5b.eu-north-1.rds.amazonaws.com",
-        USER:  process.env.DB_USER || "admin",
-        PASSWORD: process.env.DB_PASSWORD || '3Usz.feE4*Y(syFRfn:A#iFq0bMK',
-        DB: process.env.DB_NAME || "registerDB",
+        HOST: "backend-mysql-db.ctu6uiwugr5b.eu-north-1.rds.amazonaws.com",
+        USER:  "root",
+        PASSWORD: 'rootroot',
+        DB: "auth",
         dialect: "mysql",
         pool: {
             max: 5,
@@ -28,4 +28,4 @@ export const config = {
 }
 
 console.log("Config loaded:", config)
-console.log("Pool settings:", config.development.pool)
+console.log("Pool settings:", config.production.pool)

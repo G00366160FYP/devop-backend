@@ -8,15 +8,15 @@ import Sequelize from "sequelize"
 
  // development 
 console.log("Config loaded in Sequelize:", config)
-console.log("Pool settings:", config.development.pool)
-const SEQUELIZE = new Sequelize(config.development.DB,config.development.USER,config.development.PASSWORD, {
-    host: config.development.HOST,
-    dialect: config.development.dialect,
+console.log("Pool settings:", config.production.pool)
+const SEQUELIZE = new Sequelize(config.production.DB,config.production.USER,config.production.PASSWORD, {
+    host: config.production.HOST,
+    dialect: config.production.dialect,
     pool: {
-        max: config.development.pool.max,
-        min: config.development.pool.min,
-        acquire: config.development.pool.acquire,
-        idle: config.development.pool.idle
+        max: config.production.pool.max,
+        min: config.production.pool.min,
+        acquire: config.production.pool.acquire,
+        idle: config.production.pool.idle
     }
 })
 

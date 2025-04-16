@@ -18,8 +18,8 @@ resource "aws_security_group" "database" {
     from_port = 3306
     to_port  = 3306
     protocol = "tcp"
-   // security_groups = [var.eks_security_group_id]
-    cidr_blocks = ["${var.my_ip}/32", "56.228.34.210/32" ]
+    security_groups = ["sg-03b7a001baba12f8a", "sg-01f1274d73b2b227b"]
+    cidr_blocks = ["10.100.0.0/16", "51.171.96.248/32" ]
   }
 
   egress {

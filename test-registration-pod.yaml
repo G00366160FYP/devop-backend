@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-registration
+spec:
+  containers:
+  - name: curl
+    image: curlimages/curl:7.85.0
+    command: 
+    - /bin/sh
+    - -c
+    - |
+      echo "Testing registration endpoint..."
+      curl -v -X POST \
+        -H "Content-Type: application/json" \
+        -d '{"username":"testuser", "email":"test@example.com", "password":"password123"}' \
+        http://k8s-default-register-5fb62a8c41-e70805a4c3521536.elb.eu-north-1.amazonaws.com/auth/register
+      echo "Test completed, pod will remain running for 1 hour for debugging"
+      sleep 3600
+  restartPolicy: Never

@@ -1,0 +1,19 @@
+echo apiVersion: v1 > db-test.yaml
+echo kind: Pod >> db-test.yaml
+echo metadata: >> db-test.yaml
+echo   name: db-test >> db-test.yaml
+echo spec: >> db-test.yaml
+echo   hostNetwork: true >> db-test.yaml
+echo   containers: >> db-test.yaml
+echo   - name: db-test >> db-test.yaml
+echo     image: node:16-alpine >> db-test.yaml
+echo     command: ["sh", "-c"] >> db-test.yaml
+echo     args: >> db-test.yaml
+echo     - "apk add --no-cache mysql-client && npm install mysql2 && node /dbtest/db-test.js" >> db-test.yaml
+echo     volumeMounts: >> db-test.yaml
+echo     - name: test-script >> db-test.yaml
+echo       mountPath: /dbtest >> db-test.yaml
+echo   volumes: >> db-test.yaml
+echo   - name: test-script >> db-test.yaml
+echo     configMap: >> db-test.yaml
+echo       name: db-test >> db-test.yaml
