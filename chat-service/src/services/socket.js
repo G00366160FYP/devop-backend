@@ -10,7 +10,8 @@ export default function setupSocketIO(server) {
         cors: {
             origin: '*',
             methods: ['GET', 'POST']
-        }
+        },
+        path: '/ws/socket.io',
     })
 
     io.use((socket, next) => {
