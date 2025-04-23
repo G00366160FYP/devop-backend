@@ -65,6 +65,27 @@ jobs:
         file: ./Dockerfile.register-service
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/register-service:latest
+    - name: Build and push Docker image Register service
+      uses: docker/build-push-action@v4
+      with:
+          context: .
+          file: ./Dockerfile.login-service
+          push: true
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/login-service:latest
+    - name: Build and push Docker image Register service
+      uses: docker/build-push-action@v4
+      with:
+          context: .
+          file: ./Dockerfile.login-service
+          push: true
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/login-service:latest
+    - name: Build and push Docker image Register service
+      uses: docker/build-push-action@v4
+      with:
+          context: .
+          file: ./Dockerfile.chat-service
+          push: true
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/chat-service:latest
   
 #  cypress-run:
 
