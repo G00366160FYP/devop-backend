@@ -147,16 +147,39 @@ jobs:
         with:
           terraform_version: 1.5.0
       
+      - name: Terraform Init - chat Service
+        working-directory: ./chat-service/terraform
+        run: terraform init
+ 
+      - name: Terraform Apply
+        working-directory: ./chat-service/terraform
+        run: terraform apply -auto-approve -target=kubernetes_deployment.chat_service -target=kubernetes_service.chat_service        
+        env:
+          TF_VAR_aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+
+
       - name: Terraform Init - Login Service
         working-directory: ./login-service/terraform
         run: terraform init
- 
+   
       - name: Terraform Apply
         working-directory: ./login-service/terraform
         run: terraform apply -auto-approve -target=kubernetes_deployment.login_service -target=kubernetes_service.login_service        
         env:
-          TF_VAR_aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
-          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+            TF_VAR_aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+            TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+
+      - name: Terraform Init - Register Service
+        working-directory: ./register-service/terraform
+        run: terraform init
+       
+      - name: Terraform Apply
+        working-directory: ./register-service/terraform
+        run: terraform apply -auto-approve -target=kubernetes_deployment.register_service -target=kubernetes_register.login_service        
+        env:
+            TF_VAR_aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+            TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
 
 
 #      - name: Install kubectl
