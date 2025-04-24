@@ -23,10 +23,10 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: true }))
 
-app.use('/auth', chatRoomRoutes)
-app.use('/auth', messageRoutes)
+app.use('/chatRoom', chatRoomRoutes)
+app.use('/chatRoom', messageRoutes)
 
-DB.sequelize.sync({ force: true }).then(()=> {
+DB.sequelize.sync().then(()=> {
   console.log('Drop and Resync Database with { force: true }')
 })
 

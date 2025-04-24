@@ -33,9 +33,13 @@ export default function setupSocketIO(server) {
     io.on('connection', (socket) => {
         console.log(`User connected: ${socket.userId}`)
 
-        socket.on('join-room', (roomId) => {
+        socket.on('join-room', (roomId, callback) => {
             socket.join(`room-${roomId}`);
             console.log(`${socket.username} joined room-${roomId}`)
+
+            if (typeof callback === 'function'){
+                callback({ status: 'success', roomId: roomId })
+            }
 
         })
 
@@ -67,6 +71,27 @@ export default function setupSocketIO(server) {
         socket.on('disconnect', () => {
             console.log(`User disconnected: ${socket.userId}`)
         })
+
+        socket.on('delete-message', async (data, callback) => {
+            try {
+                const message = await Message.destroy({
+                    where: {
+                        id: data.messageId,
+                        userId: socket.userId
+                    }
+                })
+                if (message) {
+                    io.to(`room-${data.roomId}`).emit('message-deleted', data.messageId)
+                    if (callback) callback({ success: true })
+                } else {
+                    if (callback) callback({ success: false, error: 'Message not found or not authorized' })
+                }
+            } catch (error) {
+                console.error("Error deleting message: ", error)
+                if (callback) callback({ success: false, error: error.message })
+            }
+        })
+
     })
 
     return io

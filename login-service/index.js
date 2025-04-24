@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/auth', loginRoutes)
 
-DB.sequelize.sync({ force: true }).then(()=> {
+DB.sequelize.sync().then(()=> {
   console.log('Drop and Resync Database with { force: true }')
  })
 

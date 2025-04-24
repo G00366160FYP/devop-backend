@@ -13,6 +13,18 @@ export const createChatRoom = async (req, res) => {
         })
     }
 
+    const existingRoom = await ChatRoom.findOne({
+        where: {
+            name: req.body.name,
+        }
+    })
+
+    if (existingRoom) {
+        return res.status(400).send({
+            message: "Chat room name already exists!"
+        })
+    }
+
     const chatRoom = {
         name: req.body.name,
         description: req.body.description || "",
