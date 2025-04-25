@@ -1,3 +1,4 @@
+// Subnet group for the database
 resource "aws_db_subnet_group" "database" {
     name       = "backend-db-subnet-group"
     description = "Database subnet group for backend services"
@@ -9,11 +10,14 @@ resource "aws_db_subnet_group" "database" {
     tags       = { Name = "my-db-subnet-group" }
 }
 
+
+# Security group for the database
 resource "aws_security_group" "database" {
   name = "backend-database-security-group"
   description = "Allow Mysql traffic from EKS cluster"
   vpc_id = var.vpc_id
 
+// Allow MySQL traffic from the EKS cluster security groups and specific CIDR blocks
   ingress {
     from_port = 3306
     to_port  = 3306
@@ -22,6 +26,7 @@ resource "aws_security_group" "database" {
     cidr_blocks = ["10.100.0.0/16", "51.171.96.248/32" ]
   }
 
+// Allow all outbound traffic
   egress {
     from_port = 0
     to_port = 0
@@ -29,10 +34,12 @@ resource "aws_security_group" "database" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+
   tags = {
     Name = "backend-database-security-group"
   }
 }
+
 
 resource "aws_db_parameter_group" "mysql" {
     name = "backend-mysql-params"
@@ -56,6 +63,7 @@ resource "aws_db_parameter_group" "mysql" {
   
 }
 
+// Creates the MySQL database instance
 resource "aws_db_instance" "main" {
     identifier = "backend-mysql-db"
     engine = "mysql"
@@ -104,6 +112,7 @@ resource "aws_db_instance" "main" {
      ]
 }
 
+//  Montioring role for RDS
 resource "aws_iam_role" "rds_monitoring_role" {
     name = "rds-monitoring-role"
     assume_role_policy = jsonencode({
@@ -119,6 +128,7 @@ resource "aws_iam_role" "rds_monitoring_role" {
         ]
     })
 
+    // Attach the AWS managed policy for RDS monitoring
     managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"]
 
 }

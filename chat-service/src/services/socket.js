@@ -1,10 +1,15 @@
+// imports
 import { Server } from 'socket.io'
 import jwt from 'jsonwebtoken'
 import DB from '../../../config/models/index.js'
 
+// Import the message model from the database
 const Message = DB.MESSAGE
+
+// Secret for JWT signing and encryption
 const secret = "temp-test-secret"
 
+// setup websocket server
 export default function setupSocketIO(server) {
     const io = new Server(server, {
         cors: {
@@ -14,6 +19,7 @@ export default function setupSocketIO(server) {
         path: '/ws/socket.io',
     })
 
+    // Checks if the user is authenticated before allowing them to connect to the socket
     io.use((socket, next) => {
         const token = socket.handshake.auth.token
         if (token) {
@@ -30,9 +36,11 @@ export default function setupSocketIO(server) {
         }
     })
 
+    // Listen for incoming connections
     io.on('connection', (socket) => {
         console.log(`User connected: ${socket.userId}`)
 
+        // Listen for the 'join-room' event to join a specific room
         socket.on('join-room', (roomId, callback) => {
             socket.join(`room-${roomId}`);
             console.log(`${socket.username} joined room-${roomId}`)
@@ -43,6 +51,7 @@ export default function setupSocketIO(server) {
 
         })
 
+        // Listen for the send-message event to send a message to a specific room
         socket.on('send-message', async (data, callback) => {
         try{
             const message = await Message.create({
@@ -68,10 +77,12 @@ export default function setupSocketIO(server) {
         }
     })
 
+    // Listen for the disconnect event to handle user disconnection
         socket.on('disconnect', () => {
             console.log(`User disconnected: ${socket.userId}`)
         })
 
+        // Listen for the delete-message event to delete a message
         socket.on('delete-message', async (data, callback) => {
             try {
                 const message = await Message.destroy({

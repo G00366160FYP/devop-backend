@@ -1,7 +1,10 @@
+// Region for these resources.
 provider "aws" {
     region = "eu-north-1"
 }
 
+
+// Connect to the existing EKS cluster.
 provider "kubernetes" {
     host                   = data.aws_eks_cluster.existing_cluster.endpoint
     insecure = true
@@ -13,14 +16,17 @@ provider "kubernetes" {
     }
 }
 
+// Local variable to store the cluster name.
 locals {
     cluster_name = "devops-eks"
 }
 
+// Get information about the existing EKS cluster.
 data "aws_eks_cluster" "existing_cluster" {
     name = local.cluster_name
 }
 
+// Creates deployment for the register service from the ECR repository.
 resource "kubernetes_deployment" "register_service" {
     metadata {
       name = "register-service"
@@ -73,6 +79,7 @@ resource "kubernetes_deployment" "register_service" {
     }
 }
 
+// Creates a service for the register service to expose it within the cluster.
 resource "kubernetes_service" "register_service" {
     metadata {
         name = "register-service"

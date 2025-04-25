@@ -1,3 +1,4 @@
+// Configuration fo r database connection
 export const config = {
     development:{
         HOST: process.env.DB_HOST || "localhost",

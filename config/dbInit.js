@@ -1,3 +1,4 @@
+// Unused configuration
 import DB from "../models/index.js"
 
 async function dbInit() {

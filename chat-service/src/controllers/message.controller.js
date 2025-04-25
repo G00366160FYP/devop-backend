@@ -1,9 +1,13 @@
+// imports
 import DB from "../../../config/models/index.js"
+
+// Import the models from the database
 const MESSAGE = DB.MESSAGE
 const ChatRoom = DB.CHATROOM
 const RoomParticipant = DB.ROOMPARTICIPANT
 const USER = DB.USER
 
+// Creates a new message in a chat room
 export const create = async (req, res) => {
     try {
         console.log("Request body:", req.body)
@@ -32,6 +36,7 @@ export const create = async (req, res) => {
     }
 }
 
+// Retrieves all messages in a chat room
 export const findByRoom = async (req, res) => {
     try {
         const roomId = req.params.roomId
@@ -77,6 +82,7 @@ export const findByRoom = async (req, res) => {
     }
 }
 
+// Deletes a message by its ID if the user is the sender.
 export const deleteMessage = async (req, res) => {
     try {
         const messageId = req.params.id
