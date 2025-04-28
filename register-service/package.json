@@ -1,11 +1,12 @@
 {
   "name": "devop-backend",
   "version": "1.0.0",
+  "type" :"module",
   "description": "ATU-2024-FYP-DEV_OPS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",

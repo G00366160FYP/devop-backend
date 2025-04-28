@@ -1,0 +1,28 @@
+FROM node:16-alpine
+
+WORKDIR /project
+
+RUN mkdir -p chat-service config/models
+
+COPY config/db.config.js config/
+COPY config/dbInit.js config/
+COPY config/package-lock.json config/
+COPY config/package.json config/
+COPY config/models config/models/
+
+WORKDIR /project/config
+RUN npm install
+
+
+WORKDIR /project/chat-service
+COPY chat-service/package.json ./
+COPY chat-service/package-lock.json ./
+
+RUN npm install
+
+COPY chat-service/ ./
+
+
+EXPOSE 3002
+
+CMD ["node", "index.js"]

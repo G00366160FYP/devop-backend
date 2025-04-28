@@ -1,0 +1,132 @@
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+    
+jobs:
+      
+  build:
+
+    name: Build
+
+    runs-on: ubuntu-latest
+        
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }} 
+
+    - name: Login to amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build and push Docker image Register service
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile.register-service
+        push: true
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/register-service:latest
+
+    - name: Build and push Docker image Login service
+      uses: docker/build-push-action@v4
+      with:
+          context: .
+          file: ./Dockerfile.login-service
+          push: true
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/login-service:latest
+
+    - name: Build and push Docker image Chat service
+      uses: docker/build-push-action@v4
+      with:
+          context: .
+          file: ./Dockerfile.chat-service
+          push: true
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/chat-service:latest
+  
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+
+
+      - name: Delete Existing Resources
+        run: |
+              aws eks update-kubeconfig --name devops-eks --region ${{ secrets.AWS_REGION }}
+
+              kubectl delete deployment register-service service register-service --ignore-not-found=true
+              kubectl delete deployment chat-service service chat-service  --ignore-not-found=true
+              kubectl delete deployment login-service service login-service  --ignore-not-found=true
+
+              sleep 60
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+      
+      - name: Terraform Init - chat Service
+        working-directory: ./chat-service/terraform
+        run: terraform init
+ 
+      - name: Terraform Apply
+        working-directory: ./chat-service/terraform
+        run: terraform apply -auto-approve -target=kubernetes_deployment.chat_service -target=kubernetes_service.chat_service        
+        env:
+          TF_VAR_aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+          TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+
+
+      - name: Terraform Init - Login Service
+        working-directory: ./login-service/terraform
+        run: terraform init
+   
+      - name: Terraform Apply
+        working-directory: ./login-service/terraform
+        run: terraform apply -auto-approve -target=kubernetes_deployment.login_service -target=kubernetes_service.login_service        
+        env:
+            TF_VAR_aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+            TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+
+      - name: Terraform Init - Register Service
+        working-directory: ./register-service/terraform
+        run: terraform init
+       
+      - name: Terraform Apply
+        working-directory: ./register-service/terraform
+        run: terraform apply -auto-approve -target=kubernetes_deployment.register_service -target=kubernetes_service.register_service        
+        env:
+            TF_VAR_aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+            TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+
+
+
+      
+
+         
+

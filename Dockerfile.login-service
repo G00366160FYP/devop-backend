@@ -1,0 +1,28 @@
+FROM node:16-alpine
+
+WORKDIR /project
+
+RUN mkdir -p login-service config/models
+
+COPY config/db.config.js config/
+COPY config/dbInit.js config/
+COPY config/package-lock.json config/
+COPY config/package.json config/
+COPY config/models config/models/
+
+WORKDIR /project/config
+RUN npm install
+
+
+WORKDIR /project/login-service
+COPY login-service/package.json ./
+COPY login-service/package-lock.json ./
+
+RUN npm install
+
+COPY login-service/ ./
+
+
+EXPOSE 3001
+
+CMD ["npm", "start"]

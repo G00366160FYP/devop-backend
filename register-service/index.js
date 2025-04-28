@@ -1,8 +1,11 @@
+// Imports
 import express from 'express';
 import cors from 'cors'
 import DB from '../config/models/index.js'
 import authRoutes from './src/routes/auth.routes.js';
 
+
+// Server setup
 const app = express();
 const port = 3000
 
@@ -18,9 +21,11 @@ app.use(express.json())
 
 app.use(express.urlencoded({ extended: true }))
 
+// Routes for register endpoint.
 app.use('/auth', authRoutes)
 
-DB.sequelize.sync({ force: true }).then(()=> {
+// Connect to the database.
+DB.sequelize.sync().then(()=> {
   console.log('Drop and Resync Database with { force: true }')
 })
 
